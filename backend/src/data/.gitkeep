@@ -1,0 +1,13 @@
+/**
+ * @file README.md
+ * @description This directory is for seed data scripts.
+ *
+ * Planned files:
+ *  - seed.js      → Seeds the database with initial skills, users, etc.
+ *  - seedUsers.js → Sample user data
+ *  - seedSkills.js → Sample skill data
+ *
+ * Usage (once implemented):
+ *   node src/data/seed.js --import
+ *   node src/data/seed.js --destroy
+ */

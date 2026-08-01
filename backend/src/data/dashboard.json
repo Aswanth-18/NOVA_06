@@ -1,0 +1,333 @@
+{
+    "user": {
+        "name": "Aswanth",
+        "fullName": "Aswanth Kumar S",
+        "registerNumber": "921221104015",
+        "email": "aswanth.s21@bitsathy.ac.in",
+        "department": "Computer Science and Engineering",
+        "year": "III Year",
+        "role": "Student",
+        "profileImage": "",
+        "college": "Bannari Amman Institute of Technology",
+        "location": "Sathyamangalam, Erode, Tamil Nadu"
+    },
+    "statistics": {
+        "verifiedMentors": 86,
+        "activeStudents": 1450,
+        "sessionsCompleted": 624,
+        "skillsAvailable": 18
+    },
+    "upcomingBookings": [
+        {
+            "id": "bk_001",
+            "mentorName": "Pradeep R",
+            "mentorDepartment": "Computer Science and Engineering",
+            "mentorYear": "IV Year",
+            "skill": "React.js",
+            "scheduledDate": "2026-08-03",
+            "scheduledTime": "10:00 AM",
+            "duration": 60,
+            "status": "confirmed",
+            "meetLink": "https://meet.google.com/abc-defg-hij",
+            "profileImage": ""
+        },
+        {
+            "id": "bk_002",
+            "mentorName": "Keerthana M",
+            "mentorDepartment": "Information Technology",
+            "mentorYear": "IV Year",
+            "skill": "Python for Data Science",
+            "scheduledDate": "2026-08-05",
+            "scheduledTime": "02:30 PM",
+            "duration": 90,
+            "status": "pending",
+            "meetLink": "",
+            "profileImage": ""
+        },
+        {
+            "id": "bk_003",
+            "mentorName": "Vishnu Prasad K",
+            "mentorDepartment": "Computer Science and Engineering",
+            "mentorYear": "IV Year",
+            "skill": "DSA — Graphs & DP",
+            "scheduledDate": "2026-08-07",
+            "scheduledTime": "04:00 PM",
+            "duration": 60,
+            "status": "confirmed",
+            "meetLink": "https://meet.google.com/xyz-uvwx-yz1",
+            "profileImage": ""
+        },
+        {
+            "id": "bk_004",
+            "mentorName": "Divya Sri N",
+            "mentorDepartment": "Artificial Intelligence and Data Science",
+            "mentorYear": "IV Year",
+            "skill": "Machine Learning Basics",
+            "scheduledDate": "2026-08-10",
+            "scheduledTime": "11:00 AM",
+            "duration": 75,
+            "status": "pending",
+            "meetLink": "",
+            "profileImage": ""
+        }
+    ],
+    "recentActivities": [
+        {
+            "id": "act_001",
+            "type": "session_completed",
+            "title": "Session Completed",
+            "description": "You completed a 60-minute session on Node.js REST APIs with Harish B.",
+            "timestamp": "2026-07-30T10:00:00.000Z",
+            "icon": "check-circle",
+            "color": "green"
+        },
+        {
+            "id": "act_002",
+            "type": "booking_confirmed",
+            "title": "Booking Confirmed",
+            "description": "Your session on React.js with Pradeep R has been confirmed for Aug 3.",
+            "timestamp": "2026-07-29T14:32:00.000Z",
+            "icon": "calendar-check",
+            "color": "blue"
+        },
+        {
+            "id": "act_003",
+            "type": "skill_unlocked",
+            "title": "New Skill Unlocked",
+            "description": "You earned the 'DSA Intermediate' badge after completing 3 sessions.",
+            "timestamp": "2026-07-28T09:15:00.000Z",
+            "icon": "award",
+            "color": "purple"
+        },
+        {
+            "id": "act_004",
+            "type": "mentor_reviewed",
+            "title": "Review Submitted",
+            "description": "You rated Harish B ⭐⭐⭐⭐⭐ for the Node.js session.",
+            "timestamp": "2026-07-30T11:00:00.000Z",
+            "icon": "star",
+            "color": "yellow"
+        },
+        {
+            "id": "act_005",
+            "type": "booking_requested",
+            "title": "Booking Requested",
+            "description": "You requested a Python session with Keerthana M. Awaiting confirmation.",
+            "timestamp": "2026-07-27T16:45:00.000Z",
+            "icon": "clock",
+            "color": "orange"
+        },
+        {
+            "id": "act_006",
+            "type": "session_completed",
+            "title": "Session Completed",
+            "description": "Completed a 90-minute session on UI/UX Fundamentals with Nithya P.",
+            "timestamp": "2026-07-25T15:00:00.000Z",
+            "icon": "check-circle",
+            "color": "green"
+        }
+    ],
+    "topMentors": [
+        {
+            "id": "mn_001",
+            "name": "Pradeep R",
+            "department": "Computer Science and Engineering",
+            "year": "IV Year",
+            "skills": [
+                "React.js",
+                "Node.js",
+                "MongoDB"
+            ],
+            "rating": 4.9,
+            "totalSessions": 48,
+            "totalReviews": 42,
+            "isVerifiedMentor": true,
+            "profileImage": "",
+            "availability": "Weekdays 4–7 PM",
+            "bio": "Full-stack developer passionate about MERN. Placement coordinator at BIT CSE.",
+            "badge": "Top Mentor"
+        },
+        {
+            "id": "mn_002",
+            "name": "Keerthana M",
+            "department": "Information Technology",
+            "year": "IV Year",
+            "skills": [
+                "Python",
+                "Data Science",
+                "Pandas",
+                "NumPy"
+            ],
+            "rating": 4.8,
+            "totalSessions": 36,
+            "totalReviews": 34,
+            "isVerifiedMentor": true,
+            "profileImage": "",
+            "availability": "Weekends 10 AM–1 PM",
+            "bio": "Data Science enthusiast, completed 3 industry internships. Loves teaching analytics.",
+            "badge": "Rising Star"
+        },
+        {
+            "id": "mn_003",
+            "name": "Vishnu Prasad K",
+            "department": "Computer Science and Engineering",
+            "year": "IV Year",
+            "skills": [
+                "DSA",
+                "C++",
+                "Competitive Programming",
+                "LeetCode"
+            ],
+            "rating": 4.9,
+            "totalSessions": 61,
+            "totalReviews": 58,
+            "isVerifiedMentor": true,
+            "profileImage": "",
+            "availability": "Weekdays 6–9 PM",
+            "bio": "Competitive programmer with 1800+ rating on Codeforces. CodeChef 4-star.",
+            "badge": "Expert"
+        },
+        {
+            "id": "mn_004",
+            "name": "Divya Sri N",
+            "department": "Artificial Intelligence and Data Science",
+            "year": "IV Year",
+            "skills": [
+                "Machine Learning",
+                "Scikit-learn",
+                "Deep Learning Basics",
+                "Python"
+            ],
+            "rating": 4.7,
+            "totalSessions": 29,
+            "totalReviews": 27,
+            "isVerifiedMentor": true,
+            "profileImage": "",
+            "availability": "Weekends 2–5 PM",
+            "bio": "AI/ML researcher and IEEE student branch member. Published one paper at ICCES 2025.",
+            "badge": "AI Specialist"
+        },
+        {
+            "id": "mn_005",
+            "name": "Harish B",
+            "department": "Computer Science and Engineering",
+            "year": "IV Year",
+            "skills": [
+                "Node.js",
+                "Express.js",
+                "REST API Design",
+                "PostgreSQL"
+            ],
+            "rating": 4.8,
+            "totalSessions": 44,
+            "totalReviews": 40,
+            "isVerifiedMentor": true,
+            "profileImage": "",
+            "availability": "Weekdays 7–9 PM",
+            "bio": "Backend dev with 2 internship experiences. Loves clean code and solid API design.",
+            "badge": "Backend Pro"
+        },
+        {
+            "id": "mn_006",
+            "name": "Nithya P",
+            "department": "Information Technology",
+            "year": "IV Year",
+            "skills": [
+                "UI/UX Design",
+                "Figma",
+                "Adobe XD",
+                "Prototyping"
+            ],
+            "rating": 4.6,
+            "totalSessions": 22,
+            "totalReviews": 20,
+            "isVerifiedMentor": true,
+            "profileImage": "",
+            "availability": "Weekends 11 AM–2 PM",
+            "bio": "UI/UX designer with a portfolio of 10+ app designs. Intern at a Coimbatore startup.",
+            "badge": "Design Expert"
+        }
+    ],
+    "notifications": [
+        {
+            "id": "notif_001",
+            "type": "session_reminder",
+            "title": "Session Reminder 🔔",
+            "message": "Your React.js session with Pradeep R starts tomorrow at 10:00 AM. Make sure you're on time!",
+            "timestamp": "2026-08-02T08:00:00.000Z",
+            "isRead": false,
+            "priority": "high"
+        },
+        {
+            "id": "notif_002",
+            "type": "booking_accepted",
+            "title": "Booking Accepted ✅",
+            "message": "Pradeep R has accepted your session request for React.js on Aug 3.",
+            "timestamp": "2026-07-29T14:32:00.000Z",
+            "isRead": true,
+            "priority": "medium"
+        },
+        {
+            "id": "notif_003",
+            "type": "new_mentor",
+            "title": "New Mentor Available 🌟",
+            "message": "Senthil Kumar from ECE just joined as a verified mentor for Embedded Systems and IoT.",
+            "timestamp": "2026-07-28T10:00:00.000Z",
+            "isRead": false,
+            "priority": "low"
+        },
+        {
+            "id": "notif_004",
+            "type": "badge_earned",
+            "title": "Badge Earned 🏅",
+            "message": "Congratulations! You earned the 'DSA Intermediate' badge. Keep up the great work!",
+            "timestamp": "2026-07-28T09:16:00.000Z",
+            "isRead": true,
+            "priority": "medium"
+        },
+        {
+            "id": "notif_005",
+            "type": "session_reminder",
+            "title": "Pending Session Approval ⏳",
+            "message": "Your Python session with Keerthana M is still awaiting confirmation. She will respond within 24 hours.",
+            "timestamp": "2026-07-27T17:00:00.000Z",
+            "isRead": false,
+            "priority": "medium"
+        },
+        {
+            "id": "notif_006",
+            "type": "platform_update",
+            "title": "Platform Update 🚀",
+            "message": "SkillSync now supports group mentoring sessions for up to 5 students. Explore in Skill Marketplace!",
+            "timestamp": "2026-07-26T09:00:00.000Z",
+            "isRead": true,
+            "priority": "low"
+        }
+    ],
+    "skillProgress": [
+        {
+            "skill": "React.js",
+            "progress": 65,
+            "sessionsAttended": 3,
+            "nextMilestone": "Build a full CRUD SPA"
+        },
+        {
+            "skill": "Data Structures & Algorithms",
+            "progress": 80,
+            "sessionsAttended": 5,
+            "nextMilestone": "Solve 10 Hard problems on LeetCode"
+        },
+        {
+            "skill": "Python",
+            "progress": 45,
+            "sessionsAttended": 2,
+            "nextMilestone": "Complete NumPy & Pandas module"
+        },
+        {
+            "skill": "UI/UX Design",
+            "progress": 30,
+            "sessionsAttended": 1,
+            "nextMilestone": "Design first complete app prototype in Figma"
+        }
+    ]
+}
