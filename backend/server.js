@@ -46,6 +46,16 @@ const startServer = async () => {
         console.log('');
     });
 
+    server.on('error', (err) => {
+        if (err.code === 'EADDRINUSE') {
+            console.error(`\n❌ Error: Port ${PORT} is already in use by another process!`);
+            console.error(`👉 Please kill the process using port ${PORT} or update PORT in backend/.env\n`);
+        } else {
+            console.error('\n❌ Server error:', err.message);
+        }
+        process.exit(1);
+    });
+
     // ─── Graceful Shutdown ──────────────────────────────────────────────────────
     const gracefulShutdown = (signal) => {
         console.log(`\n⚠️  Received ${signal}. Shutting down gracefully...`);
@@ -61,8 +71,9 @@ const startServer = async () => {
     // ─── Unhandled Rejection Safety Net ────────────────────────────────────────
     process.on('unhandledRejection', (reason, promise) => {
         console.error('🔴 Unhandled Promise Rejection:', reason);
-        // Optionally close the server and exit
-        server.close(() => process.exit(1));
+        if (process.env.NODE_ENV === 'production') {
+            server.close(() => process.exit(1));
+        }
     });
 };
 
