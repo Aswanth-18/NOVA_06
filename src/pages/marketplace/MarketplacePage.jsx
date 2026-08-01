@@ -17,7 +17,7 @@ const CATEGORIES = ['All', 'Programming', 'Design', 'AI/ML', 'Data Science', 'Co
 const DIFFICULTIES = ['Beginner', 'Intermediate', 'Advanced'];
 const STATUS_OPTIONS = ['Active', 'Inactive'];
 
-const API_BASE_URL = 'http://localhost:5000/api/v1';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api/v1';
 
 export default function MarketplacePage() {
     const { user, token } = useAuth();
