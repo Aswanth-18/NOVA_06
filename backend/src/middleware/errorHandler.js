@@ -19,7 +19,7 @@ const errorHandler = (err, req, res, next) => { // eslint-disable-line no-unused
         const messages = Object.values(err.errors).map((e) => e.message);
         return res.status(400).json({
             success: false,
-            message: 'Validation failed.',
+            message: 'Validation failed: ' + messages.join(', '),
             errors: messages,
         });
     }
