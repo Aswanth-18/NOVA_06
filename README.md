@@ -55,39 +55,14 @@ SkillSync/
 └── vite.config.js          # Build tool configurations
 ```
 
-## 🚀 Getting Started
-
-### Prerequisites
-Make sure you have [Node.js](https://nodejs.org/) installed on your machine.
-
-### Installation
-
-1. **Clone the repository:**
-   ```bash
-   git clone <your-repository-url>
-   cd SkillSync
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-3. **Set up Environment Variables (Optional):**
-   Copy the example environment file and customize as needed:
-   ```bash
-   cp .env.example .env
-   ```
-
-4. **Run the development server:**
-   ```bash
-   npm run dev
-   ```
-
-5. **Build for Production:**
-   ```bash
-   npm run build
-   ```
+## Project Setup
+- Clone the repository
+- Install dependencies
+- Copy backend/.env.example to backend/.env
+- Add MongoDB URI
+- Add JWT Secret
+- Start Backend
+- Start Frontend
 
 ## 📝 License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
