@@ -267,43 +267,6 @@ const mentorApplicationSchema = new mongoose.Schema(
     }
 );
 
-// ─── Message Schema ───────────────────────────────────────────────────────────
-const messageSchema = new mongoose.Schema(
-    {
-        sender: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
-            required: true,
-        },
-        receiver: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
-            required: true,
-        },
-        bookingId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Session',
-            required: true,
-        },
-        message: {
-            type: String,
-            required: [true, 'Message content is required.'],
-            trim: true,
-        },
-        messageType: {
-            type: String,
-            enum: ['text', 'emoji', 'file'],
-            default: 'text',
-        },
-        isRead: {
-            type: Boolean,
-            default: false,
-        },
-    },
-    {
-        timestamps: true,
-    }
-);
 
 // ─── Achievement Schema ───────────────────────────────────────────────────────
 const achievementSchema = new mongoose.Schema(
@@ -332,12 +295,10 @@ const badgeSchema = new mongoose.Schema(
 
 const User = mongoose.models.User || mongoose.model('User', userSchema);
 const MentorApplication = mongoose.models.MentorApplication || mongoose.model('MentorApplication', mentorApplicationSchema);
-const Message = mongoose.models.Message || mongoose.model('Message', messageSchema);
 const Achievement = mongoose.models.Achievement || mongoose.model('Achievement', achievementSchema);
 const Badge = mongoose.models.Badge || mongoose.model('Badge', badgeSchema);
 
 module.exports = User;
 module.exports.MentorApplication = MentorApplication;
-module.exports.Message = Message;
 module.exports.Achievement = Achievement;
 module.exports.Badge = Badge;
