@@ -16,6 +16,8 @@ const sessionRoutes = require('./sessionRoutes');
 const mentorRoutes = require('./mentorRoutes');
 const bookingRoutes = require('./bookingRoutes');
 const studentRoutes = require('./studentRoutes');
+const conversationRoutes = require('./conversationRoutes');
+const messageRoutes = require('./messageRoutes');
 
 const router = express.Router();
 
@@ -63,8 +65,8 @@ router.use('/sessions', sessionRoutes);   // RBAC per-route
 router.use('/mentor', mentorRoutes);    // RBAC per-route
 router.use('/bookings', bookingRoutes);
 router.use('/students', studentRoutes);   // RBAC per-route
-router.use('/conversations', sessionRoutes);
-router.use('/messages', sessionRoutes);
+router.use('/conversations', conversationRoutes);
+router.use('/messages', messageRoutes);
 router.use('/leaderboard', leaderboardRoutes);
 router.use('/achievements', leaderboardRoutes);
 router.use('/xp', leaderboardRoutes);

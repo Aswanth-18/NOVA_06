@@ -75,7 +75,7 @@ const getConversations = asyncHandler(async (req, res) => {
         // Count unread messages
         const unreadCount = await Message.countDocuments({
             conversationId: conv._id,
-            receiver: userId,
+            receiverId: userId,
             isRead: false,
         });
 
@@ -145,13 +145,13 @@ const getMessagesByConversation = asyncHandler(async (req, res) => {
 
     // Automatically mark incoming messages as read
     await Message.updateMany(
-        { conversationId: conv._id, receiver: userId, isRead: false },
+        { conversationId: conv._id, receiverId: userId, isRead: false },
         { isRead: true }
     );
 
     const messages = await Message.find({ conversationId: conv._id })
-        .populate('sender', 'fullName email role')
-        .populate('receiver', 'fullName email role')
+        .populate('senderId', 'fullName email role')
+        .populate('receiverId', 'fullName email role')
         .sort('createdAt');
 
     sendSuccess(res, 200, 'Messages retrieved successfully.', messages);
@@ -223,8 +223,8 @@ const sendMessage = asyncHandler(async (req, res) => {
     const actualReceiverId = receiverId || (session.student.toString() === senderId.toString() ? session.mentor : session.student);
 
     const newMessage = await Message.create({
-        sender: senderId,
-        receiver: actualReceiverId,
+        senderId: senderId,
+        receiverId: actualReceiverId,
         conversationId: conv._id,
         message: message.trim(),
         messageType: messageType || 'text',
@@ -236,8 +236,8 @@ const sendMessage = asyncHandler(async (req, res) => {
     await conv.save();
 
     const populatedMsg = await Message.findById(newMessage._id)
-        .populate('sender', 'fullName email role')
-        .populate('receiver', 'fullName email role');
+        .populate('senderId', 'fullName email role')
+        .populate('receiverId', 'fullName email role');
 
     sendSuccess(res, 201, 'Message sent successfully.', populatedMsg);
 });
@@ -259,7 +259,7 @@ const markMessageAsRead = asyncHandler(async (req, res) => {
         return sendError(res, 404, 'Message not found.');
     }
 
-    if (message.receiver.toString() !== req.user._id.toString()) {
+    if (message.receiverId.toString() !== req.user._id.toString()) {
         return sendError(res, 403, 'Access denied.');
     }
 

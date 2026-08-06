@@ -352,11 +352,11 @@ export default function MyBookingsPage() {
                                                         disabled={isUpdating} leftIcon={<XCircle size={13} />}>
                                                         Cancel Request
                                                     </Button>
-                                                ) : isAccepted ? (
+                                                ) : isAccepted || b.status === 'completed' ? (
                                                     <Button variant="primary" size="sm"
                                                         onClick={() => navigate('messages', { bookingId: b._id })}
                                                         leftIcon={<MessageCircle size={13} />}>
-                                                        Chat Now
+                                                        {b.status === 'completed' ? 'View Chat History' : 'Chat Now'}
                                                     </Button>
                                                 ) : (
                                                     <span className="text-xs text-[var(--text-muted)] italic">Status: {badgeInfo.label}</span>
@@ -378,18 +378,20 @@ export default function MyBookingsPage() {
                                                             Reject
                                                         </Button>
                                                     </div>
-                                                ) : isAccepted ? (
+                                                ) : isAccepted || b.status === 'completed' ? (
                                                     <div className="flex items-center gap-2 w-full justify-end">
                                                         <Button variant="outline" size="sm"
                                                             onClick={() => navigate('messages', { bookingId: b._id })}
                                                             leftIcon={<MessageCircle size={13} />}>
-                                                            Chat Now
+                                                            {b.status === 'completed' ? 'View Chat History' : 'Chat Now'}
                                                         </Button>
-                                                        <Button variant="primary" size="sm"
-                                                            onClick={() => handleStatusUpdate(b._id, 'completed')}
-                                                            disabled={isUpdating} leftIcon={<ShieldCheck size={13} />}>
-                                                            Mark Completed
-                                                        </Button>
+                                                        {isAccepted && (
+                                                            <Button variant="primary" size="sm"
+                                                                onClick={() => handleStatusUpdate(b._id, 'completed')}
+                                                                disabled={isUpdating} leftIcon={<ShieldCheck size={13} />}>
+                                                                Mark Completed
+                                                            </Button>
+                                                        )}
                                                     </div>
                                                 ) : (
                                                     <span className="text-xs text-[var(--text-muted)] italic">Status: {badgeInfo.label}</span>

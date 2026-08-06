@@ -401,7 +401,7 @@ export default function MessagesPage() {
                                             </div>
 
                                             {msgs.map(msg => {
-                                                const isMe = (msg.sender?._id || msg.sender) === user?._id;
+                                                const isMe = (msg.senderId?._id || msg.senderId) === user?._id;
 
                                                 return (
                                                     <div key={msg._id} className={`flex items-end gap-2 mb-1.5 ${isMe ? 'justify-end' : 'justify-start'}`}>

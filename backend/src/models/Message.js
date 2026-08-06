@@ -7,12 +7,12 @@ const mongoose = require('mongoose');
 
 const messageSchema = new mongoose.Schema(
     {
-        sender: {
+        senderId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
             required: [true, 'Sender reference is required.'],
         },
-        receiver: {
+        receiverId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
             required: [true, 'Receiver reference is required.'],
@@ -44,7 +44,7 @@ const messageSchema = new mongoose.Schema(
 
 // Index to quickly fetch messages for a specific conversation
 messageSchema.index({ conversationId: 1, createdAt: 1 });
-messageSchema.index({ receiver: 1, isRead: 1 });
+messageSchema.index({ receiverId: 1, isRead: 1 });
 
 const Message = mongoose.models.Message || mongoose.model('Message', messageSchema);
 
