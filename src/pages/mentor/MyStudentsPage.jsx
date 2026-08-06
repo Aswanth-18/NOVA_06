@@ -52,8 +52,8 @@ export default function MyStudentsPage() {
         return matchesSearch && matchesDept;
     });
 
-    const handleMessage = () => {
-        navigate('messages');
+    const handleMessage = (studentId) => {
+        navigate('messages', { partnerId: studentId });
     };
 
     return (
@@ -129,7 +129,7 @@ export default function MyStudentsPage() {
                         className="bg-white/[0.03] border border-[var(--border-color)] text-[var(--text-primary)] text-xs font-bold rounded-xl px-4 py-2.5 outline-none cursor-pointer"
                     >
                         {['All', 'CSE', 'IT', 'AIDS', 'ECE', 'EEE', 'MECH', 'CIVIL', 'OTHER'].map(d => (
-                            <option key={d} value={d}>{d === 'All' ? 'All Departments' : d}</option>
+                            <option className="bg-[#0f111a] text-white" key={d} value={d}>{d === 'All' ? 'All Departments' : d}</option>
                         ))}
                     </select>
                 </div>
@@ -188,12 +188,18 @@ export default function MyStudentsPage() {
                                     </div>
                                 </div>
 
-                                <button
-                                    onClick={handleMessage}
-                                    className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-brand-600/20 hover:bg-brand-600 text-brand-300 hover:text-white border border-brand-500/30 text-xs font-bold transition-all"
-                                >
-                                    <MessageCircle size={14} /> Open Chat
-                                </button>
+                                {student.lastStatus === 'accepted' ? (
+                                    <button
+                                        onClick={() => handleMessage(student._id)}
+                                        className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-brand-600/20 hover:bg-brand-600 text-brand-300 hover:text-white border border-brand-500/30 text-xs font-bold transition-all"
+                                    >
+                                        <MessageCircle size={14} /> Chat Now
+                                    </button>
+                                ) : (
+                                    <button disabled className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-white/5 text-[var(--text-muted)] border border-white/5 text-xs font-bold opacity-50 cursor-not-allowed">
+                                        <MessageCircle size={14} /> No Active Chat
+                                    </button>
+                                )}
                             </div>
                         ))}
                     </div>

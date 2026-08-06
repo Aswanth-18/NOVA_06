@@ -3,7 +3,7 @@ import {
     Calendar, Clock, CheckCircle2,
     Search, CalendarClock, History,
     RefreshCw, XCircle, CheckCircle, ShieldCheck,
-    BookOpen, GraduationCap, Users, Award
+    BookOpen, GraduationCap, Users, Award, MessageCircle
 } from 'lucide-react';
 import AppLayout from '../../components/AppLayout';
 import { Card, CardBody } from '../../components/Card';
@@ -352,6 +352,12 @@ export default function MyBookingsPage() {
                                                         disabled={isUpdating} leftIcon={<XCircle size={13} />}>
                                                         Cancel Request
                                                     </Button>
+                                                ) : isAccepted ? (
+                                                    <Button variant="primary" size="sm"
+                                                        onClick={() => navigate('messages', { bookingId: b._id })}
+                                                        leftIcon={<MessageCircle size={13} />}>
+                                                        Chat Now
+                                                    </Button>
                                                 ) : (
                                                     <span className="text-xs text-[var(--text-muted)] italic">Status: {badgeInfo.label}</span>
                                                 )
@@ -373,11 +379,18 @@ export default function MyBookingsPage() {
                                                         </Button>
                                                     </div>
                                                 ) : isAccepted ? (
-                                                    <Button variant="primary" size="sm"
-                                                        onClick={() => handleStatusUpdate(b._id, 'completed')}
-                                                        disabled={isUpdating} leftIcon={<ShieldCheck size={13} />}>
-                                                        Mark Completed
-                                                    </Button>
+                                                    <div className="flex items-center gap-2 w-full justify-end">
+                                                        <Button variant="outline" size="sm"
+                                                            onClick={() => navigate('messages', { bookingId: b._id })}
+                                                            leftIcon={<MessageCircle size={13} />}>
+                                                            Chat Now
+                                                        </Button>
+                                                        <Button variant="primary" size="sm"
+                                                            onClick={() => handleStatusUpdate(b._id, 'completed')}
+                                                            disabled={isUpdating} leftIcon={<ShieldCheck size={13} />}>
+                                                            Mark Completed
+                                                        </Button>
+                                                    </div>
                                                 ) : (
                                                     <span className="text-xs text-[var(--text-muted)] italic">Status: {badgeInfo.label}</span>
                                                 )

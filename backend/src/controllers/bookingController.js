@@ -13,6 +13,8 @@
 const Session = require('../models/Session');
 const User = require('../models/User');
 const MentorSkill = require('../models/MentorSkill');
+const Message = require('../models/Message');
+const Conversation = require('../models/Conversation');
 const asyncHandler = require('../utils/asyncHandler');
 const { sendSuccess, sendError } = require('../utils/apiResponse');
 const { addXP } = require('./leaderboardController');
@@ -238,6 +240,20 @@ const updateBookingStatus = asyncHandler(async (req, res) => {
     }
 
     await session.save();
+
+    // Auto-create initial conversation if accepted
+    if (targetStatus === 'accepted' && previousStatus !== 'accepted') {
+        const existingConv = await Conversation.findOne({ bookingId: session._id });
+        if (!existingConv) {
+            await Conversation.create({
+                bookingId: session._id,
+                mentorId: session.mentor,
+                userId: session.student,
+                lastMessage: 'Conversation started',
+                lastMessageAt: new Date()
+            });
+        }
+    }
 
     // Auto-award XP when session is marked as completed
     if (targetStatus === 'completed' && previousStatus !== 'completed') {

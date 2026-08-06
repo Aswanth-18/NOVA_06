@@ -6,7 +6,8 @@
 
 const User = require('../models/User');
 const Session = require('../models/Session');
-const { Message } = require('../models/User');
+const Message = require('../models/Message');
+const Conversation = require('../models/Conversation');
 const asyncHandler = require('../utils/asyncHandler');
 const { sendSuccess, sendError } = require('../utils/apiResponse');
 
@@ -26,36 +27,61 @@ const getConversations = asyncHandler(async (req, res) => {
 
     const userId = req.user._id;
 
-    // Find all accepted sessions where user is student or mentor
+    // Auto-create missing conversations for any existing accepted/completed bookings
     const acceptedSessions = await Session.find({
-        status: 'accepted',
+        status: { $in: ['accepted', 'completed'] },
         $or: [{ student: userId }, { mentor: userId }]
-    })
-        .populate('student', 'fullName registerNumber department email role profileImage isVerifiedMentor')
-        .populate('mentor', 'fullName registerNumber department email role profileImage isVerifiedMentor')
-        .sort('-updatedAt');
+    });
+
+    for (const session of acceptedSessions) {
+        const existingConv = await Conversation.findOne({ bookingId: session._id });
+        if (!existingConv) {
+            await Conversation.create({
+                bookingId: session._id,
+                mentorId: session.mentor,
+                userId: session.student,
+                lastMessage: 'Conversation started',
+                lastMessageAt: new Date()
+            });
+        }
+    }
+
+    const userConversations = await Conversation.find({
+        $or: [{ userId: userId }, { mentorId: userId }]
+    }).populate({
+        path: 'bookingId',
+        populate: [
+            { path: 'student', select: 'fullName registerNumber department email role profileImage isVerifiedMentor' },
+            { path: 'mentor', select: 'fullName registerNumber department email role profileImage isVerifiedMentor' }
+        ]
+    }).sort('-lastMessageAt');
 
     const conversations = [];
 
-    for (const session of acceptedSessions) {
+    for (const conv of userConversations) {
+        if (!conv.bookingId) continue;
+        const session = conv.bookingId;
+        
+        // Exclude if pending, rejected, cancelled
+        if (['pending', 'rejected', 'cancelled'].includes(session.status)) {
+            continue;
+        }
+
         const isUserStudent = session.student._id.toString() === userId.toString();
         const partner = isUserStudent ? session.mentor : session.student;
 
         if (!partner) continue;
 
-        // Fetch latest message for this booking
-        const lastMsg = await Message.findOne({ bookingId: session._id })
-            .sort('-createdAt');
-
         // Count unread messages
         const unreadCount = await Message.countDocuments({
-            bookingId: session._id,
+            conversationId: conv._id,
             receiver: userId,
             isRead: false,
         });
 
         conversations.push({
-            _id: session._id,
+            _id: conv._id,
+            conversationId: conv._id,
             bookingId: session._id,
             partner: {
                 _id: partner._id,
@@ -70,10 +96,11 @@ const getConversations = asyncHandler(async (req, res) => {
             skillName: session.skillName,
             scheduledDate: session.scheduledDate,
             scheduledTime: session.scheduledTime,
-            lastMessage: lastMsg ? lastMsg.message : 'Session accepted. Start chatting!',
-            lastMessageTime: lastMsg ? lastMsg.createdAt : session.updatedAt,
+            lastMessage: conv.lastMessage,
+            lastMessageTime: conv.lastMessageAt,
             unreadCount,
-            isOnline: true, // UI indicator
+            isOnline: true,
+            status: session.status,
         });
     }
 
@@ -94,38 +121,35 @@ const getMessagesByConversation = asyncHandler(async (req, res) => {
     const { conversationId } = req.params;
     const userId = req.user._id;
 
-    // Verify session exists and is accepted
-    let session = await Session.findOne({
-        _id: conversationId,
-        status: 'accepted',
-        $or: [{ student: userId }, { mentor: userId }]
-    });
+    let conv = await Conversation.findOne({
+        $or: [{ bookingId: conversationId }, { _id: conversationId }]
+    }).populate('bookingId');
 
-    // Fallback: search by partner user ID if conversationId is a user ID
-    if (!session) {
-        session = await Session.findOne({
-            status: 'accepted',
+    if (!conv) {
+        conv = await Conversation.findOne({
             $or: [
-                { student: userId, mentor: conversationId },
-                { mentor: userId, student: conversationId }
+                { userId: userId, mentorId: conversationId },
+                { mentorId: userId, userId: conversationId }
             ]
-        }).sort('-updatedAt');
+        }).populate('bookingId');
     }
 
-    if (!session) {
+    if (!conv || !conv.bookingId) {
         return sendError(res, 403, 'A student and mentor can only chat after a booking request has been accepted.');
     }
 
-    const bookingId = session._id;
+    const session = conv.bookingId;
+    if (['pending', 'rejected', 'cancelled'].includes(session.status)) {
+         return sendError(res, 403, 'Chat is disabled for this booking status.');
+    }
 
     // Automatically mark incoming messages as read
     await Message.updateMany(
-        { bookingId, receiver: userId, isRead: false },
+        { conversationId: conv._id, receiver: userId, isRead: false },
         { isRead: true }
     );
 
-    // Fetch messages sorted by createdAt ascending
-    const messages = await Message.find({ bookingId })
+    const messages = await Message.find({ conversationId: conv._id })
         .populate('sender', 'fullName email role')
         .populate('receiver', 'fullName email role')
         .sort('createdAt');
@@ -151,46 +175,65 @@ const sendMessage = asyncHandler(async (req, res) => {
         return sendError(res, 400, 'Message content is required.');
     }
 
-    // 1. Validate: Cannot send message to self
     if (receiverId && receiverId.toString() === senderId.toString()) {
         return sendError(res, 400, 'Users cannot send messages to themselves.');
     }
 
-    // 2. Validate: Must have an accepted booking
-    let session = null;
-    if (bookingId) {
-        session = await Session.findOne({
+    let conv = await Conversation.findOne({ bookingId }).populate('bookingId');
+    
+    if (!conv && receiverId) {
+        conv = await Conversation.findOne({
+            $or: [
+                { userId: senderId, mentorId: receiverId },
+                { mentorId: senderId, userId: receiverId }
+            ]
+        }).populate('bookingId');
+    }
+
+    if (!conv || !conv.bookingId) {
+        const session = await Session.findOne({
             _id: bookingId,
             status: 'accepted',
             $or: [{ student: senderId }, { mentor: senderId }]
         });
+        if (session) {
+             conv = await Conversation.create({
+                bookingId: session._id,
+                mentorId: session.mentor,
+                userId: session.student,
+                lastMessage: 'Conversation started',
+                lastMessageAt: new Date()
+            });
+            conv.bookingId = session;
+        } else {
+            return sendError(res, 403, 'Users cannot send messages unless they have an accepted booking.');
+        }
     }
 
-    if (!session && receiverId) {
-        session = await Session.findOne({
-            status: 'accepted',
-            $or: [
-                { student: senderId, mentor: receiverId },
-                { mentor: senderId, student: receiverId }
-            ]
-        }).sort('-updatedAt');
+    const session = conv.bookingId;
+    
+    if (session.status !== 'accepted' && session.status !== 'completed') {
+        return sendError(res, 403, 'Cannot send messages for this booking status.');
+    }
+    
+    if (session.status === 'completed') {
+        return sendError(res, 403, 'This session is completed. Chat is read-only.');
     }
 
-    if (!session) {
-        return sendError(res, 403, 'Users cannot send messages unless they have an accepted booking.');
-    }
-
-    const actualBookingId = session._id;
     const actualReceiverId = receiverId || (session.student.toString() === senderId.toString() ? session.mentor : session.student);
 
     const newMessage = await Message.create({
         sender: senderId,
         receiver: actualReceiverId,
-        bookingId: actualBookingId,
+        conversationId: conv._id,
         message: message.trim(),
         messageType: messageType || 'text',
         isRead: false,
     });
+    
+    conv.lastMessage = message.trim();
+    conv.lastMessageAt = new Date();
+    await conv.save();
 
     const populatedMsg = await Message.findById(newMessage._id)
         .populate('sender', 'fullName email role')

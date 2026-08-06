@@ -4,14 +4,16 @@ const RouterContext = createContext(null);
 
 export function RouterProvider({ children }) {
     const [page, setPage] = useState('landing'); // 'landing' | 'login' | 'register'
+    const [navState, setNavState] = useState(null);
 
-    const navigate = (to) => {
+    const navigate = (to, state = null) => {
         setPage(to);
+        setNavState(state);
         window.scrollTo({ top: 0, behavior: 'instant' });
     };
 
     return (
-        <RouterContext.Provider value={{ page, navigate }}>
+        <RouterContext.Provider value={{ page, navigate, navState }}>
             {children}
         </RouterContext.Provider>
     );

@@ -8,6 +8,7 @@ import {
 import AppLayout from '../../components/AppLayout';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
+import { useRouter } from '../../context/RouterContext';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api/v1';
 
@@ -77,6 +78,7 @@ function EmptyState({ hasConversations }) {
 export default function MessagesPage() {
     const { token, user } = useAuth();
     const { toast } = useToast();
+    const { navState } = useRouter();
 
     const role = user?.role;
     const isForbiddenRole = role === 'faculty' || role === 'admin';
@@ -105,7 +107,7 @@ export default function MessagesPage() {
             const data = await res.json();
             if (data.success && Array.isArray(data.data)) {
                 setConversations(data.data);
-                if (data.data.length > 0 && !activeBookingId) {
+                if (data.data.length > 0 && !activeBookingId && !navState) {
                     setActiveBookingId(data.data[0].bookingId);
                 }
             }
@@ -124,6 +126,18 @@ export default function MessagesPage() {
     useEffect(() => {
         fetchConversations();
     }, [fetchConversations]);
+
+    // Handle initial selection based on navState
+    useEffect(() => {
+        if (conversations.length > 0 && navState) {
+            if (navState.bookingId) {
+                setActiveBookingId(navState.bookingId);
+            } else if (navState.partnerId) {
+                const match = conversations.find(c => c.partner._id === navState.partnerId);
+                if (match) setActiveBookingId(match.bookingId);
+            }
+        }
+    }, [conversations, navState]);
 
     // Fetch messages for active conversation
     const fetchMessages = useCallback(async (bookingId) => {
@@ -427,6 +441,11 @@ export default function MessagesPage() {
 
                             {/* Input Bar */}
                             <div className="px-4 py-3 border-t border-[var(--border-color)] bg-white/[0.01] flex-shrink-0 relative">
+                                {activeConvo.status === 'completed' && (
+                                    <div className="absolute inset-0 bg-[var(--bg-surface)]/60 backdrop-blur-[2px] z-10 flex items-center justify-center">
+                                        <p className="text-xs font-bold text-[var(--text-muted)]">This session is completed. Chat is read-only.</p>
+                                    </div>
+                                )}
                                 {showEmojiPicker && (
                                     <div className="absolute bottom-16 left-4 p-2 bg-[var(--bg-elevated)] border border-[var(--border-color)] rounded-xl flex gap-2 shadow-xl z-20">
                                         {EMOJIS.map(emoji => (
