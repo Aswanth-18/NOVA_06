@@ -25,7 +25,10 @@ app.use(cors(corsOptions));  // CORS with allowed origins from config
 app.options('*', cors(corsOptions)); // Handle pre-flight requests
 
 // ─── Rate Limiting ────────────────────────────────────────────────────────────
-app.use('/api', rateLimiter);
+// Disabled in development to avoid "Too many requests" errors
+if (process.env.NODE_ENV === 'production') {
+    app.use('/api', rateLimiter);
+}
 
 // ─── Request Logging ──────────────────────────────────────────────────────────
 if (process.env.NODE_ENV === 'development') {
